@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { createGlobalStyle } from "styled-components";
 import FileReaderInput from "react-file-reader-input";
 import { ReactReader } from "./modules";
+import useSelectedText from "./utils/useSelectedText";
 import {
   Container,
   ReaderContainer,
@@ -11,13 +12,12 @@ import {
   GenericButton,
   CloseIcon,
   FontSizeButton,
-  ButtonWrapper
+  ButtonWrapper,
 } from "./Components";
 
 const storage = global.localStorage || null;
 
-const DEMO_URL =
-  "/react-reader/files/alice.epub";
+const DEMO_URL = "/react-reader/files/alice.epub";
 const DEMO_NAME = "Alice in wonderland";
 
 const GlobalStyle = createGlobalStyle`
@@ -58,7 +58,7 @@ class App extends Component {
           : 2,
       localFile: null,
       localName: null,
-      largeText: false
+      largeText: false,
     };
     this.rendition = null;
   }
@@ -66,7 +66,7 @@ class App extends Component {
   toggleFullscreen = () => {
     this.setState(
       {
-        fullscreen: !this.state.fullscreen
+        fullscreen: !this.state.fullscreen,
       },
       () => {
         setTimeout(() => {
@@ -77,10 +77,10 @@ class App extends Component {
     );
   };
 
-  onLocationChanged = location => {
+  onLocationChanged = (location) => {
     this.setState(
       {
-        location
+        location,
       },
       () => {
         storage && storage.setItem("epub-location", location);
@@ -92,7 +92,7 @@ class App extends Component {
     const nextState = !this.state.largeText;
     this.setState(
       {
-        largeText: nextState
+        largeText: nextState,
       },
       () => {
         this.rendition.themes.fontSize(nextState ? "140%" : "100%");
@@ -100,7 +100,7 @@ class App extends Component {
     );
   };
 
-  getRendition = rendition => {
+  getRendition = (rendition) => {
     // Set inital font-size, and add a pointer to rendition for later updates
     const { largeText } = this.state;
     this.rendition = rendition;
@@ -115,7 +115,7 @@ class App extends Component {
       this.setState({
         localFile: e.target.result,
         localName: file.name,
-        location: null
+        location: null,
       });
     }
   };
@@ -132,7 +132,10 @@ class App extends Component {
             />
           </LogoWrapper>
           <ButtonWrapper>
-            <FileReaderInput as="buffer" onChange={this.handleChangeFile}>
+            <FileReaderInput
+              as="buffer"
+              onChange={this.handleChangeFile}
+            >
               <GenericButton>Upload local epub</GenericButton>
             </FileReaderInput>
             <GenericButton onClick={this.toggleFullscreen}>

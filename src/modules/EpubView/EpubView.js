@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Epub from "epubjs/lib/index";
+import Epub from "epubjs";
 import defaultStyles from "./style";
 
 global.ePub = Epub; // Fix for v3 branch of epub.js -> needs ePub to by a global var
@@ -10,7 +10,7 @@ class EpubView extends Component {
     super(props);
     this.state = {
       isLoaded: false,
-      toc: []
+      toc: [],
     };
     this.viewerRef = React.createRef();
     this.location = props.location;
@@ -32,7 +32,7 @@ class EpubView extends Component {
       this.setState(
         {
           isLoaded: true,
-          toc: toc
+          toc: toc,
         },
         () => {
           tocChanged && tocChanged(toc);
@@ -75,7 +75,7 @@ class EpubView extends Component {
       contained: true,
       width: "100%",
       height: "100%",
-      ...epubOptions
+      ...epubOptions,
     });
 
     this.prevPage = () => {
@@ -91,6 +91,11 @@ class EpubView extends Component {
         ? location
         : toc[0].href
     );
+
+    // Apply a class to selected text
+    this.rendition.on("selected", function (cfiRange, contents) {
+      console.log(cfiRange);
+    });
   }
 
   registerEvents() {
@@ -98,11 +103,11 @@ class EpubView extends Component {
     this.rendition.on("locationChanged", this.onLocationChange);
     this.rendition.on("keyup", handleKeyPress || this.handleKeyPress);
     if (handleTextSelected) {
-      this.rendition.on('selected', handleTextSelected);
+      this.rendition.on("selected", handleTextSelected);
     }
   }
 
-  onLocationChange = loc => {
+  onLocationChange = (loc) => {
     const { location, locationChanged } = this.props;
     const newLocation = loc && loc.start;
     if (location !== newLocation) {
@@ -138,13 +143,13 @@ EpubView.defaultProps = {
   tocChanged: null,
   styles: defaultStyles,
   epubOptions: {},
-  epubInitOptions: {}
+  epubInitOptions: {},
 };
 
 EpubView.propTypes = {
   url: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.instanceOf(ArrayBuffer)
+    PropTypes.instanceOf(ArrayBuffer),
   ]),
   loadingView: PropTypes.element,
   location: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -155,7 +160,7 @@ EpubView.propTypes = {
   epubOptions: PropTypes.object,
   getRendition: PropTypes.func,
   handleKeyPress: PropTypes.func,
-  handleTextSelected: PropTypes.func
+  handleTextSelected: PropTypes.func,
 };
 
 export default EpubView;
