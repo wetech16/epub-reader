@@ -1,3 +1,9 @@
+# Run react code
+
+1. cd to epub-reader directory
+2. run cmd line: npm i
+3. after install all the package, run cmd line: npm start
+
 # React ePub reader
 
 An ePub-reader for react powered by EpubJS #react #epubjs #webpack #babel #standardjs
@@ -19,7 +25,7 @@ import {
   EpubView, // Underlaying epub-canvas (wrapper for epub.js iframe)
   EpubViewStyle, // Styles for EpubView, you can pass it to the instance as a style prop for customize it
   ReactReader, // A simple epub-reader with left/right button and chapter navigation
-  ReactReaderStyle // Styles for the epub-reader it you need to customize it
+  ReactReaderStyle, // Styles for the epub-reader it you need to customize it
 } from "react-reader";
 ```
 
@@ -43,7 +49,7 @@ class App extends Component {
           url={"/alice.epub"}
           title={"Alice in wonderland"}
           location={"epubcfi(/6/2[cover]!/6)"}
-          locationChanged={epubcifi => console.log(epubcifi)}
+          locationChanged={(epubcifi) => console.log(epubcifi)}
         />
       </div>
     );
@@ -86,8 +92,8 @@ class App extends Component {
         <EpubView
           url={"/alice.epub"}
           location={"epubcfi(/6/2[cover]!/6)"}
-          locationChanged={epubcifi => console.log(epubcifi)}
-          tocChanged={toc => console.log(toc)}
+          locationChanged={(epubcifi) => console.log(epubcifi)}
+          tocChanged={(toc) => console.log(toc)}
         />
       </div>
     );
@@ -97,7 +103,7 @@ class App extends Component {
 
 #### EpubView props
 
-- `url` [string, required] - url to the epub-file, if its on another domain, remember to add cors for the file. Epubjs fetch this by a http-call, so it need to be public available. 
+- `url` [string, required] - url to the epub-file, if its on another domain, remember to add cors for the file. Epubjs fetch this by a http-call, so it need to be public available.
 - `loadingView` [element] - if you want to customize the loadingView
 - `location` [string, number] - set / update location of the epub
 - `locationChanged` [func] - a function that receives the current location while user is reading
